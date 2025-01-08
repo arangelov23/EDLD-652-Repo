@@ -15,3 +15,10 @@ remotes::install_github("datalorax/edld652", force = TRUE)
 library(edld652)
 list_datasets()
 ```
+
+```{r}
+library(here)
+library(rio)
+d <- rio::import(here::here("data", "rstats_tweets.rds"), setclass = "tbl_df")
+```
+
