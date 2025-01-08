@@ -1,0 +1,17 @@
+---
+title: "lab1"
+author: "Nakyung, Songyi, Will"
+date: "2025-01-08"
+output: html_document
+---
+```{r}
+#install.packages("remotes")
+#library(remotes)
+remotes::install_github("datalorax/edld652", force = TRUE)
+```
+
+
+```{r}
+library(edld652)
+list_datasets()
+```
