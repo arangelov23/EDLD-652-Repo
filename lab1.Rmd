@@ -4,21 +4,74 @@ author: "Nakyung, Songyi, Will"
 date: "2025-01-08"
 output: html_document
 ---
-```{r}
-#install.packages("remotes")
-#library(remotes)
-remotes::install_github("datalorax/edld652", force = TRUE)
-```
-
-
-```{r}
-library(edld652)
-list_datasets()
-```
 
 ```{r}
 library(here)
 library(rio)
 d <- rio::import(here::here("data", "rstats_tweets.rds"), setclass = "tbl_df")
 ```
+
+# Initial Exploration
+
+```{r}
+library(tidyverse)
+ggplot(data = d, aes(x = display_text_width)) +
+  geom_histogram(aes(y = ..density..), binwidth = 5, color = "black", fill = "skyblue", alpha = 0.5) +
+  theme_minimal()
+```
+
+Small binwidth: Useful for emphasizing detailed distributions and identifying outliers.
+
+```{r}
+ggplot(data = d, aes(x = display_text_width)) +
+  geom_histogram(aes(y = ..density..), binwidth = 20, color = "black", fill = "skyblue", alpha = 0.5) +
+  theme_minimal()
+```
+
+Medium binwidth: Provides a balanced visualization that highlights major patterns.
+
+```{r}
+ggplot(data = d, aes(x = display_text_width)) +
+  geom_histogram(aes(y = ..density..), binwidth = 100, color = "black", fill = "skyblue", alpha = 0.5) +
+  theme_minimal()
+```
+
+Large binwidth: Suitable for capturing the overall structure of the data.
+
+```{r}
+ggplot(d, aes(display_text_width)) +
+  geom_density(fill = "gray20")
+```
+
+Default bandwidth for density plots: Naturally represents the distribution, making it easier to understand broader trends.
+
+```{r}
+ggplot(d, aes(display_text_width)) +
+  geom_density(bw = 0.2, fill = "gray20")
+```
+
+Small bandwidth for density: Emphasizes fine-grained patterns
+
+
+# Plot 
+```{r}
+library(tidytext)
+plot <- d %>% 
+  unnest_tokens(word, text)
+plot
+```
+
+```{r}
+plot %>% 
+  anti_join(stop_words) %>% 
+  count(word, sort = TRUE) %>% 
+  mutate(word = reorder(word, n)) %>%
+  slice(1:15) %>% 
+  ggplot(aes(n, word)) +
+    geom_col(fill = "cornflowerblue")
+```
+
+
+
+
 
